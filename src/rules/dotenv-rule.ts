@@ -2,6 +2,8 @@
  * @file The base classes of the rules of this plugin, which hold what every rule has in common:
  * its metadata, its documentation and the way it is attached to the lines of a file.
  */
+import { LineText } from '../language/line-text.js';
+import { Reporter } from './reporter.js';
 import type {
   RuleContext,
   RuleFixType,
@@ -9,7 +11,6 @@ import type {
   RuleType,
   RuleVisitor,
 } from '@eslint/core';
-import { LineText } from '../language/line-text.js';
 import type { DotenvSourceCode } from '../language/source-code.js';
 import type {
   DotenvLanguageOptions,
@@ -17,7 +18,6 @@ import type {
   LineNode,
   ProgramNode,
 } from '../language/types.js';
-import { Reporter } from './reporter.js';
 import type { DotenvRule, DotenvRuleDocumentation } from './types.js';
 
 /** The page that documents the rules. */

@@ -2,9 +2,9 @@
  * @file The `unordered-key` rule, which reports keys that are not in alphabetical order within
  * their group.
  */
-import type { ProgramNode } from '../language/types.js';
 import { ProgramRule } from './dotenv-rule.js';
 import { KeyGroup } from './key-groups.js';
+import type { ProgramNode } from '../language/types.js';
 import type { Reporter } from './reporter.js';
 import type { DotenvRule } from './types.js';
 
@@ -32,6 +32,7 @@ class UnorderedKeyRule extends ProgramRule<'unordered'> {
    * @param reporter Reports the problems of the file.
    */
   protected check(program: ProgramNode, reporter: Reporter<'unordered'>): void {
+    // eslint-disable-next-line functional/no-loop-statements -- the loop only reports problems to ESLint, one call each
     for (const group of KeyGroup.split(program.body)) {
       const first = group.lines.at(0);
       const last = group.lines.at(-1);
@@ -39,6 +40,7 @@ class UnorderedKeyRule extends ProgramRule<'unordered'> {
       if (first !== undefined && last !== undefined) {
         const sorted = group.sortedText(reporter.text);
 
+        // eslint-disable-next-line functional/no-loop-statements -- the loop only reports problems to ESLint, one call each
         for (const { line, key, other } of group.findMisplacements()) {
           reporter.report(line, 'unordered', { key, other }, (fixer) =>
             fixer.replaceTextRange([first.range[0], last.range[1]], sorted),

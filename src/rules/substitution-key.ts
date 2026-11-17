@@ -2,10 +2,10 @@
  * @file The `substitution-key` rule, which reports variable references with unbalanced braces
  * or invalid names.
  */
-import type { LineText } from '../language/line-text.js';
 import { isEscaped, trim } from '../language/text.js';
-import type { LineNode } from '../language/types.js';
 import { LineRule } from './dotenv-rule.js';
+import type { LineText } from '../language/line-text.js';
+import type { LineNode } from '../language/types.js';
 import type { Reporter } from './reporter.js';
 import type { DotenvRule } from './types.js';
 

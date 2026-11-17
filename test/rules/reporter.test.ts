@@ -1,16 +1,16 @@
 /**
  * @file Tests for the reporter that rules use to report problems and their fixes.
  */
+import { describe, expect, it, jest } from '@jest/globals';
+import { DotenvParser } from '../../src/language/parser.js';
+import { DotenvSourceCode } from '../../src/language/source-code.js';
+import { Reporter } from '../../src/rules/reporter.js';
+import type { DotenvNode } from '../../src/language/types.js';
 import type {
   RuleTextEdit,
   RuleTextEditor,
   ViolationReport,
 } from '@eslint/core';
-import { describe, expect, it, jest } from '@jest/globals';
-import { DotenvParser } from '../../src/language/parser.js';
-import { DotenvSourceCode } from '../../src/language/source-code.js';
-import type { DotenvNode } from '../../src/language/types.js';
-import { Reporter } from '../../src/rules/reporter.js';
 
 /** The text of the files these tests report on. */
 type Messages = 'problem';

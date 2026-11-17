@@ -2,7 +2,6 @@
  * @file The source code object ESLint hands to rules: the text, the syntax tree, how to walk it
  * and which comments hold ESLint directives.
  */
-import type { DirectiveType, FileProblem, RulesConfig } from '@eslint/core';
 import {
   ConfigCommentParser,
   Directive,
@@ -11,12 +10,12 @@ import {
 } from '@eslint/plugin-kit';
 import { LineText } from './line-text.js';
 import { trim } from './text.js';
+import type { DirectiveType } from '@eslint/core';
 import type {
   CommentNode,
   DotenvLanguageOptions,
   DotenvNode,
   ProgramNode,
-  SourceLocation,
 } from './types.js';
 
 /** The parser of the comments that carry ESLint directives. */
@@ -119,10 +118,7 @@ export class DotenvSourceCode extends TextSourceCodeBase<{
    * const { directives } = sourceCode.getDisableDirectives();
    * ```
    */
-  public getDisableDirectives(): {
-    problems: FileProblem[];
-    directives: Directive[];
-  } {
+  public getDisableDirectives() {
     const directives = this.getInlineConfigNodes().flatMap((comment) => {
       const parsed = commentParser.parseDirective(getCommentValue(comment));
 
@@ -149,10 +145,7 @@ export class DotenvSourceCode extends TextSourceCodeBase<{
    * const { configs } = sourceCode.applyInlineConfig();
    * ```
    */
-  public applyInlineConfig(): {
-    problems: FileProblem[];
-    configs: { config: { rules: RulesConfig }; loc: SourceLocation }[];
-  } {
+  public applyInlineConfig() {
     const results = this.getInlineConfigNodes().flatMap((comment) => {
       const parsed = commentParser.parseDirective(getCommentValue(comment));
 

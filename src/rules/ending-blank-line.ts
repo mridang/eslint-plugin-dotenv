@@ -2,8 +2,8 @@
  * @file The `ending-blank-line` rule, which reports a file that does not end with a line break.
  */
 import { getLineBreak } from '../language/text.js';
-import type { ProgramNode } from '../language/types.js';
 import { ProgramRule } from './dotenv-rule.js';
+import type { ProgramNode } from '../language/types.js';
 import type { Reporter } from './reporter.js';
 import type { DotenvRule } from './types.js';
 

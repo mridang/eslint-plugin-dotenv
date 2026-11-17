@@ -28,6 +28,7 @@ const plugin = {
   configs: {} as Record<string, unknown>,
 };
 
+// eslint-disable-next-line functional/immutable-data -- the config refers to the plugin object, so it can only be added once the plugin exists
 plugin.configs.recommended = [
   {
     name: 'dotenv/recommended',

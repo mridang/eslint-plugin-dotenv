@@ -1,9 +1,9 @@
 /**
  * @file The dotenv language, which teaches ESLint to read `.env` files.
  */
-import type { File, Language, OkParseResult, ParseResult } from '@eslint/core';
 import { DotenvParser } from './parser.js';
 import { DotenvSourceCode } from './source-code.js';
+import type { File, Language, OkParseResult, ParseResult } from '@eslint/core';
 import type {
   DotenvLanguageOptions,
   DotenvNode,
@@ -11,12 +11,12 @@ import type {
 } from './types.js';
 
 /** The visitor keys of the tree: only the root has children. */
-const VISITOR_KEYS: Record<string, string[]> = {
+const VISITOR_KEYS = {
   Program: ['body'],
   Entry: [],
   Comment: [],
   Blank: [],
-};
+} satisfies Record<string, string[]>;
 
 /**
  * The dotenv language: it parses the text of a `.env` file into lines and builds the source

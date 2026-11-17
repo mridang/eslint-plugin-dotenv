@@ -48,15 +48,11 @@ async function appliesTo(fileName: string): Promise<boolean> {
   return config?.language instanceof DotenvLanguage;
 }
 
-/**
- * Compares two names alphabetically.
- * @param left The first name.
- * @param right The second name.
- * @returns A negative number, zero or a positive number.
- */
-function compareNames(left: string, right: string): number {
-  return left.localeCompare(right);
-}
+/** Compares names alphabetically. */
+const NAME_COLLATOR = new Intl.Collator('en', {
+  numeric: true,
+  sensitivity: 'base',
+});
 
 describe('plugin', () => {
   it('names itself after the package', () => {
@@ -69,7 +65,9 @@ describe('plugin', () => {
   });
 
   it('provides every rule, each documented and recommended', () => {
-    expect(Object.keys(rules).toSorted(compareNames)).toEqual(RULE_NAMES);
+    expect(Object.keys(rules).toSorted(NAME_COLLATOR.compare)).toEqual(
+      RULE_NAMES,
+    );
     expect(plugin.rules).toBe(rules);
 
     for (const [name, rule] of Object.entries(rules)) {
@@ -84,7 +82,7 @@ describe('plugin', () => {
     const fixable = Object.entries(rules)
       .filter(([, rule]) => rule.meta?.fixable !== undefined)
       .map(([name]) => name)
-      .toSorted(compareNames);
+      .toSorted(NAME_COLLATOR.compare);
 
     expect(fixable).toEqual(
       RULE_NAMES.filter((name) => name !== 'schema-violation'),

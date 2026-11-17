@@ -2,8 +2,8 @@
  * @file The `duplicated-key` rule, which reports a key that is assigned more than once.
  */
 import { LineText } from '../language/line-text.js';
-import type { ProgramNode } from '../language/types.js';
 import { ProgramRule } from './dotenv-rule.js';
+import type { ProgramNode } from '../language/types.js';
 import type { Reporter } from './reporter.js';
 import type { DotenvRule } from './types.js';
 
@@ -42,6 +42,7 @@ class DuplicatedKeyRule extends ProgramRule<'duplicated'> {
       assignments.toReversed().map(({ line, key }) => [key, line]),
     );
 
+    // eslint-disable-next-line functional/no-loop-statements -- the loop only reports problems to ESLint, one call each
     for (const { line, key } of assignments) {
       if (firstLines.get(key) !== line) {
         const commented = line.raw.split('\n').map((part) => `# ${part}`);
