@@ -1,8 +1,8 @@
 /**
  * @file The `extra-blank-line` rule, which reports blank lines that follow another blank line.
  */
-import type { ProgramNode } from '../language/types.js';
 import { ProgramRule } from './dotenv-rule.js';
+import type { ProgramNode } from '../language/types.js';
 import type { Reporter } from './reporter.js';
 import type { DotenvRule } from './types.js';
 
@@ -33,6 +33,7 @@ class ExtraBlankLineRule extends ProgramRule<'extra'> {
   protected check(program: ProgramNode, reporter: Reporter<'extra'>): void {
     const blanks = program.body.filter((line) => line.type === 'Blank');
 
+    // eslint-disable-next-line functional/no-loop-statements -- the loop only reports problems to ESLint, one call each
     for (const [index, line] of blanks.entries()) {
       const previous = blanks[index - 1];
 

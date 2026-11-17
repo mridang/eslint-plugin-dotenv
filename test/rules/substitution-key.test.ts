@@ -8,10 +8,10 @@ import { ruleTester } from '../utils/tester.js';
 ruleTester.run('substitution-key', rule as never, {
   valid: [
     'ABC=$BAR',
-    'FOO=${BAR}',
+    `FOO=\${BAR}`,
     'FOO="$BAR"',
-    'ABC=${BAR}$XYZ',
-    'FOO=$ABC{${BAR}',
+    `ABC=\${BAR}$XYZ`,
+    `FOO=$ABC{\${BAR}`,
     'BIZ=$FOO-$ABC',
     String.raw`ABC=\${BAR`,
     String.raw`FOO=\$BAR}`,
@@ -27,42 +27,42 @@ ruleTester.run('substitution-key', rule as never, {
       errors: [
         { messageId: 'incorrect', data: { key: 'ABC' }, line: 1, column: 1 },
       ],
-      output: 'ABC=${BAR}',
+      output: `ABC=\${BAR}`,
     },
     {
       code: 'XYZ=$BAR}',
       errors: [{ messageId: 'incorrect', data: { key: 'XYZ' } }],
-      output: 'XYZ=${BAR}',
+      output: `XYZ=\${BAR}`,
     },
     {
-      code: 'FOO=${BAR!}',
+      code: `FOO=\${BAR!}`,
       errors: [{ messageId: 'incorrect', data: { key: 'FOO' } }],
       output: null,
     },
     {
-      code: 'ABC=${BAR$XYZ}',
+      code: `ABC=\${BAR$XYZ}`,
       errors: [{ messageId: 'incorrect', data: { key: 'ABC' } }],
       output: null,
     },
     {
-      code: 'FOO=${ABC-$BAR}',
+      code: `FOO=\${ABC-$BAR}`,
       errors: [{ messageId: 'incorrect', data: { key: 'FOO' } }],
       output: null,
     },
     {
-      code: 'XYZ=${FOO${BAR}',
+      code: `XYZ=\${FOO\${BAR}`,
       errors: [{ messageId: 'incorrect', data: { key: 'XYZ' } }],
       output: null,
     },
     {
       code: 'export ABC=${BAR',
       errors: [{ messageId: 'incorrect', data: { key: 'ABC' } }],
-      output: 'export ABC=${BAR}',
+      output: `export ABC=\${BAR}`,
     },
     {
-      code: 'ABC=${A}tail$B}',
+      code: `ABC=\${A}tail$B}`,
       errors: [{ messageId: 'incorrect', data: { key: 'ABC' } }],
-      output: 'ABC=${A}tail${B}',
+      output: `ABC=\${A}tail\${B}`,
     },
   ],
 });

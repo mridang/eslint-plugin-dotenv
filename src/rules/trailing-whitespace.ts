@@ -1,10 +1,10 @@
 /**
  * @file The `trailing-whitespace` rule, which reports a line that ends with a space.
  */
-import type { LineText } from '../language/line-text.js';
 import { trimEnd } from '../language/text.js';
-import type { LineNode } from '../language/types.js';
 import { LineRule } from './dotenv-rule.js';
+import type { LineText } from '../language/line-text.js';
+import type { LineNode } from '../language/types.js';
 import type { Reporter } from './reporter.js';
 import type { DotenvRule } from './types.js';
 

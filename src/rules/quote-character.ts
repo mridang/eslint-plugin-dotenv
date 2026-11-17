@@ -1,10 +1,10 @@
 /**
  * @file The `quote-character` rule, which reports a value that has quotes it does not need.
  */
-import type { LineText } from '../language/line-text.js';
 import { hasWhitespace } from '../language/text.js';
-import type { LineNode } from '../language/types.js';
 import { LineRule } from './dotenv-rule.js';
+import type { LineText } from '../language/line-text.js';
+import type { LineNode } from '../language/types.js';
 import type { Reporter } from './reporter.js';
 import type { DotenvRule } from './types.js';
 

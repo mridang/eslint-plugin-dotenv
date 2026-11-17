@@ -97,11 +97,7 @@ export class DotenvParser {
 
     const parts = text.split('\n');
     const offsets = parts.reduce<number[]>(
-      (starts, part) => {
-        starts.push((starts.at(-1) ?? 0) + part.length + 1);
-
-        return starts;
-      },
+      (starts, part) => [...starts, (starts.at(-1) ?? 0) + part.length + 1],
       [0],
     );
 
@@ -166,9 +162,10 @@ export class DotenvParser {
           return scan;
         }
 
-        scan.ranges.push([scan.open.number, line.number]);
-
-        return { open: null, ranges: scan.ranges };
+        return {
+          open: null,
+          ranges: [...scan.ranges, [scan.open.number, line.number]],
+        };
       },
       { open: null, ranges: [] },
     );
@@ -191,19 +188,23 @@ export class DotenvParser {
       ),
     );
 
-    return lines
-      .filter((line) => !continuations.has(line.number))
-      .map((first) => {
-        const endNumber = ranges.get(first.number) ?? first.number;
-        const group = lines.slice(first.number - 1, endNumber);
+    return lines.flatMap((first) => {
+      if (continuations.has(first.number)) {
+        return [];
+      }
 
-        return {
+      const endNumber = ranges.get(first.number) ?? first.number;
+      const group = lines.slice(first.number - 1, endNumber);
+
+      return [
+        {
           first,
           last: group.at(-1) ?? first,
           raw: group.map((member) => member.raw).join('\n'),
           isLast: endNumber === lines.length,
-        };
-      });
+        },
+      ];
+    });
   }
 
   /**

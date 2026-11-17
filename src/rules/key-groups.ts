@@ -64,11 +64,14 @@ export class KeyGroup {
           return { start: scan.start, end, groups: scan.groups };
         }
 
-        if (end !== null) {
-          scan.groups.push(new KeyGroup(body.slice(scan.start, end)));
-        }
-
-        return { start: index + 1, end: null, groups: scan.groups };
+        return {
+          start: index + 1,
+          end: null,
+          groups:
+            end === null
+              ? scan.groups
+              : [...scan.groups, new KeyGroup(body.slice(scan.start, end))],
+        };
       },
       { start: 0, end: null, groups: [] },
     ).groups;
@@ -134,13 +137,9 @@ export class KeyGroup {
     const pieces = this.lines.reduce<LineNode[][]>((found, line) => {
       const open = found.at(-1);
 
-      if (open === undefined || open.at(-1)?.type !== 'Comment') {
-        found.push([line]);
-      } else {
-        open.push(line);
-      }
-
-      return found;
+      return open === undefined || open.at(-1)?.type !== 'Comment'
+        ? [...found, [line]]
+        : [...found.slice(0, -1), [...open, line]];
     }, []);
 
     return pieces

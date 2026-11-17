@@ -15,7 +15,7 @@ ruleTester.run('quote-character', rule as never, {
     'FOO="authSource=admin"',
     "FOO='authSource=admin'",
     'BAR="$ABC"',
-    "FOO='${BAR}BAR'",
+    `FOO='\${BAR}BAR'`,
     'FOO="with #comment"',
     "FOO='with #comment'",
     'FOO="#only-comment"',

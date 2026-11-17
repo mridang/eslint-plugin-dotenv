@@ -2,9 +2,9 @@
  * @file Tests for the dotenv language.
  */
 import { describe, expect, it } from '@jest/globals';
-import type { File } from '@eslint/core';
 import { DotenvLanguage } from '../../src/language/language.js';
 import { DotenvSourceCode } from '../../src/language/source-code.js';
+import type { File } from '@eslint/core';
 
 const language = new DotenvLanguage();
 

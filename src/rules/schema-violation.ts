@@ -2,10 +2,10 @@
  * @file The `schema-violation` rule, which checks a file against a dotenv-linter schema.
  */
 import { LineText } from '../language/line-text.js';
-import type { ProgramNode } from '../language/types.js';
 import { DotenvSchema } from '../schema.js';
-import type { SchemaInput, SchemaValueType } from '../schema.js';
 import { ProgramRule } from './dotenv-rule.js';
+import type { ProgramNode } from '../language/types.js';
+import type { SchemaInput, SchemaValueType } from '../schema.js';
 import type { DotenvRuleContext } from './dotenv-rule.js';
 import type { Reporter } from './reporter.js';
 import type { DotenvRule } from './types.js';
@@ -91,6 +91,7 @@ class SchemaViolationRule extends ProgramRule<
       .filter((line) => line.type !== 'Comment')
       .map((line) => ({ line, text: new LineText(line.raw) }));
 
+    // eslint-disable-next-line functional/no-loop-statements -- the loop only reports problems to ESLint, one call each
     for (const { line, text } of lines) {
       const problem = this.findProblem(schema, text);
 
@@ -102,6 +103,7 @@ class SchemaViolationRule extends ProgramRule<
     const seen = new Set(lines.map(({ text }) => text.key));
     const last = lines.at(-1)?.line;
 
+    // eslint-disable-next-line functional/no-loop-statements -- the loop only reports problems to ESLint, one call each
     for (const [key, entry] of schema.entries) {
       if (entry.required && !seen.has(key)) {
         reporter.reportAt(last?.head ?? program.loc, 'required', { key });

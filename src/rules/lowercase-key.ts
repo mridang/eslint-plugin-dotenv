@@ -1,9 +1,9 @@
 /**
  * @file The `lowercase-key` rule, which reports keys that are not in uppercase.
  */
+import { LineRule } from './dotenv-rule.js';
 import type { LineText } from '../language/line-text.js';
 import type { LineNode } from '../language/types.js';
-import { LineRule } from './dotenv-rule.js';
 import type { Reporter } from './reporter.js';
 import type { DotenvRule } from './types.js';
 

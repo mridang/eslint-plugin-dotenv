@@ -1,13 +1,13 @@
 /**
  * @file Tests for the base classes of the rules.
  */
-import type { RuleVisitor } from '@eslint/core';
 import { describe, expect, it, jest } from '@jest/globals';
-import type { LineText } from '../../src/language/line-text.js';
 import { DotenvParser } from '../../src/language/parser.js';
 import { DotenvSourceCode } from '../../src/language/source-code.js';
-import type { LineNode, ProgramNode } from '../../src/language/types.js';
 import { LineRule, ProgramRule } from '../../src/rules/dotenv-rule.js';
+import type { LineNode, ProgramNode } from '../../src/language/types.js';
+import type { LineText } from '../../src/language/line-text.js';
+import type { RuleVisitor } from '@eslint/core';
 import type { DotenvRuleContext } from '../../src/rules/dotenv-rule.js';
 import type { Reporter } from '../../src/rules/reporter.js';
 
