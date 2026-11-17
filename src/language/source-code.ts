@@ -21,12 +21,12 @@ import type {
 /** The parser of the comments that carry ESLint directives. */
 const commentParser = new ConfigCommentParser();
 
-/** The directive labels that switch rules on and off. */
-const DIRECTIVE_LABELS = new Set([
-  'eslint-disable',
-  'eslint-enable',
-  'eslint-disable-next-line',
-  'eslint-disable-line',
+/** The directive labels that switch rules on and off, with the type of directive each one is. */
+const DIRECTIVE_TYPES = new Map<string, DirectiveType>([
+  ['eslint-disable', 'disable'],
+  ['eslint-enable', 'enable'],
+  ['eslint-disable-next-line', 'disable-next-line'],
+  ['eslint-disable-line', 'disable-line'],
 ]);
 
 /** A step of the walk over the tree, which visits one node when entering or leaving it. */
@@ -122,10 +122,13 @@ export class DotenvSourceCode extends TextSourceCodeBase<{
     const directives = this.getInlineConfigNodes().flatMap((comment) => {
       const parsed = commentParser.parseDirective(getCommentValue(comment));
 
-      return parsed !== undefined && DIRECTIVE_LABELS.has(parsed.label)
+      const type =
+        parsed === undefined ? undefined : DIRECTIVE_TYPES.get(parsed.label);
+
+      return parsed !== undefined && type !== undefined
         ? [
             new Directive({
-              type: parsed.label.slice('eslint-'.length) as DirectiveType,
+              type,
               node: comment,
               value: parsed.value,
               justification: parsed.justification,

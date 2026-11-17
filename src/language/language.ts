@@ -19,6 +19,17 @@ const VISITOR_KEYS = {
 } satisfies Record<string, string[]>;
 
 /**
+ * Reads the text of a file, which ESLint may hand over as bytes.
+ * @param file The file.
+ * @returns The text.
+ */
+function bodyText(file: File): string {
+  return typeof file.body === 'string'
+    ? file.body
+    : new TextDecoder().decode(file.body);
+}
+
+/**
  * The dotenv language: it parses the text of a `.env` file into lines and builds the source
  * code that rules inspect.
  */
@@ -74,7 +85,7 @@ export class DotenvLanguage implements Language<{
    * ```
    */
   public parse(file: File): ParseResult<ProgramNode> {
-    return { ok: true, ast: this.parser.parse(file.body as string) };
+    return { ok: true, ast: this.parser.parse(bodyText(file)) };
   }
 
   /**
@@ -92,7 +103,7 @@ export class DotenvLanguage implements Language<{
     parseResult: OkParseResult<ProgramNode>,
   ): DotenvSourceCode {
     return new DotenvSourceCode({
-      text: file.body as string,
+      text: bodyText(file),
       ast: parseResult.ast,
     });
   }

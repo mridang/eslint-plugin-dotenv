@@ -7,10 +7,18 @@ import { DotenvLanguage } from './language/language.js';
 import { rules } from './rules/index.js';
 
 /** The package metadata, read so the plugin reports its own name and version. */
-const { name, version } = createRequire(import.meta.url)('../package.json') as {
-  name: string;
-  version: string;
-};
+const packageJson: unknown = createRequire(import.meta.url)('../package.json');
+
+const meta: Record<string, unknown> =
+  typeof packageJson === 'object' && packageJson !== null
+    ? Object.fromEntries(Object.entries(packageJson))
+    : {};
+
+const { name, version } = meta;
+
+if (typeof name !== 'string' || typeof version !== 'string') {
+  throw new TypeError('The package.json of this plugin has no name or version');
+}
 
 /** The name of the language, as a configuration refers to it. */
 const LANGUAGE = 'dotenv/dotenv';

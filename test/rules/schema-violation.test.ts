@@ -30,7 +30,7 @@ await writeFile(file, JSON.stringify(schema));
 
 const base = 'NEEDED=1\n';
 
-ruleTester.run('schema-violation', rule as never, {
+ruleTester.run('schema-violation', rule, {
   valid: [
     'FOO=BAR',
     { code: 'FOO=BAR', options: [{}] },

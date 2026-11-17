@@ -5,7 +5,7 @@
 import rule from '../../src/rules/unordered-key.js';
 import { ruleTester } from '../utils/tester.js';
 
-ruleTester.run('unordered-key', rule as never, {
+ruleTester.run('unordered-key', rule, {
   valid: [
     '',
     'FOO=BAR',

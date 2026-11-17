@@ -5,7 +5,7 @@
 import rule from '../../src/rules/key-without-value.js';
 import { ruleTester } from '../utils/tester.js';
 
-ruleTester.run('key-without-value', rule as never, {
+ruleTester.run('key-without-value', rule, {
   valid: ['FOO=BAR', '', 'FOO=', '# FOO', 'export FOO='],
   invalid: [
     {

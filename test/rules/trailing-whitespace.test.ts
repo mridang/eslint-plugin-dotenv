@@ -5,7 +5,7 @@
 import rule from '../../src/rules/trailing-whitespace.js';
 import { ruleTester } from '../utils/tester.js';
 
-ruleTester.run('trailing-whitespace', rule as never, {
+ruleTester.run('trailing-whitespace', rule, {
   valid: ['DEBUG_HTTP=true', '# comment ', '', 'A=1\t', '\n'],
   invalid: [
     {

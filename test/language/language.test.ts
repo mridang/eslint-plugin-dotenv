@@ -39,6 +39,7 @@ describe('DotenvLanguage', () => {
 
   it('rejects language options, because it has none', () => {
     expect(() => {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion -- the test passes an option the type forbids on purpose, to prove the language refuses it at run time
       language.validateLanguageOptions({ sourceType: 'module' } as never);
     }).toThrow('The dotenv language has no options, but got: sourceType.');
   });

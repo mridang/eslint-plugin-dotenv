@@ -3,9 +3,9 @@
  */
 import { describe, expect, it } from '@jest/globals';
 import { Linter } from 'eslint';
-import plugin from '../../src/index.js';
 import { DotenvParser } from '../../src/language/parser.js';
 import { DotenvSourceCode } from '../../src/language/source-code.js';
+import { eslintPlugin } from '../utils/tester.js';
 
 /** Matches the message ESLint gives for a directive that suppresses nothing. */
 const UNUSED_DIRECTIVE = /unused eslint-disable directive/iu;
@@ -34,7 +34,7 @@ function lint(
     [
       {
         files: ['**/.env'],
-        plugins: { dotenv: plugin as never },
+        plugins: { dotenv: eslintPlugin },
         language: 'dotenv/dotenv',
         rules: Object.fromEntries(
           rules.map((rule) => [`dotenv/${rule}`, 'error']),
@@ -163,7 +163,7 @@ describe('traversal', () => {
 
   it('knows the parent of a line', () => {
     const sourceCode = sourceCodeOf('A=1\n');
-    const [line] = sourceCode.ast.body;
+    const line = sourceCode.ast.body.at(0);
 
     expect(line && sourceCode.getParent(line)).toBe(sourceCode.ast);
     expect(sourceCode.getParent(sourceCode.ast)).toBeUndefined();
@@ -171,7 +171,7 @@ describe('traversal', () => {
 
   it('reads text and locations through the base class', () => {
     const sourceCode = sourceCodeOf('A=1\nB=2');
-    const second = sourceCode.ast.body[1];
+    const second = sourceCode.ast.body.at(1);
 
     expect(second && sourceCode.getText(second)).toBe('B=2');
     expect(second && sourceCode.getRange(second)).toEqual([4, 7]);
@@ -228,7 +228,7 @@ describe('directives while linting', () => {
       [
         {
           files: ['**/.env'],
-          plugins: { dotenv: plugin as never },
+          plugins: { dotenv: eslintPlugin },
           language: 'dotenv/dotenv',
           linterOptions: { reportUnusedDisableDirectives: 'error' },
           rules: { 'dotenv/lowercase-key': 'error' },

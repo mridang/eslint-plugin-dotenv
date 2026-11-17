@@ -5,7 +5,7 @@
 import rule from '../../src/rules/quote-character.js';
 import { ruleTester } from '../utils/tester.js';
 
-ruleTester.run('quote-character', rule as never, {
+ruleTester.run('quote-character', rule, {
   valid: [
     'FOO=BAR',
     "FOO='BAR BAR'",

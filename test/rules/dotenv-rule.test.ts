@@ -108,6 +108,7 @@ function contextOf<Options extends unknown[]>(
   text: string,
   options: Options,
 ): DotenvRuleContext<'seen', Options> {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion -- the context is a mock that carries only the members these base classes read, not the whole ESLint rule context
   return {
     options,
     cwd: '/',

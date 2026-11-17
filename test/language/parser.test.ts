@@ -85,7 +85,9 @@ describe('lines', () => {
 
 describe('positions', () => {
   it('locates each line', () => {
-    const [first, second] = parser.parse('AB=1\r\nC=2\n').body;
+    const found = parser.parse('AB=1\r\nC=2\n').body;
+    const first = found.at(0);
+    const second = found.at(1);
 
     expect(first?.range).toEqual([0, 4]);
     expect(first?.loc).toEqual({
@@ -118,7 +120,7 @@ describe('multi-line values', () => {
   });
 
   it('locates the merged line across all its lines', () => {
-    const [merged] = parser.parse("A='one\ntwo'\n").body;
+    const merged = parser.parse("A='one\ntwo'\n").body.at(0);
 
     expect(merged?.range).toEqual([0, 11]);
     expect(merged?.loc).toEqual({
@@ -170,7 +172,7 @@ describe('multi-line values', () => {
   });
 
   it('keeps Windows line breaks inside the range of a merged line', () => {
-    const [merged] = parser.parse('A="x\r\ny"\r\n').body;
+    const merged = parser.parse('A="x\r\ny"\r\n').body.at(0);
 
     expect(merged?.raw).toBe('A="x\ny"');
     expect(merged?.range).toEqual([0, 8]);

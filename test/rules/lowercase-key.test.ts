@@ -5,7 +5,7 @@
 import rule from '../../src/rules/lowercase-key.js';
 import { ruleTester } from '../utils/tester.js';
 
-ruleTester.run('lowercase-key', rule as never, {
+ruleTester.run('lowercase-key', rule, {
   valid: ['FOO=BAR', 'export FOO=BAR', '# foo=bar', 'FOO_1=x', ''],
   invalid: [
     {

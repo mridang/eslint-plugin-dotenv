@@ -5,7 +5,7 @@
 import rule from '../../src/rules/ending-blank-line.js';
 import { ruleTester } from '../utils/tester.js';
 
-ruleTester.run('ending-blank-line', rule as never, {
+ruleTester.run('ending-blank-line', rule, {
   valid: ['', '\n', 'FOO=BAR\n', 'FOO=BAR\r\n', '# comment\n', 'A="x\ny"\n'],
   invalid: [
     {

@@ -35,7 +35,7 @@ class ExtraBlankLineRule extends ProgramRule<'extra'> {
 
     // eslint-disable-next-line functional/no-loop-statements -- the loop only reports problems to ESLint, one call each
     for (const [index, line] of blanks.entries()) {
-      const previous = blanks[index - 1];
+      const previous = index === 0 ? undefined : blanks[index - 1];
 
       if (previous?.number === line.number - 1) {
         const [start, end] = line.raw === '\n' ? previous.range : line.range;

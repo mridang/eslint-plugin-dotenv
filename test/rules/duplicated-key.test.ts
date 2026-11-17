@@ -5,7 +5,7 @@
 import rule from '../../src/rules/duplicated-key.js';
 import { ruleTester } from '../utils/tester.js';
 
-ruleTester.run('duplicated-key', rule as never, {
+ruleTester.run('duplicated-key', rule, {
   valid: [
     'FOO=BAR\nBAR=FOO',
     'FOO=BAR\nFoo=FOO',
