@@ -5,7 +5,7 @@
 import rule from '../../src/rules/value-without-quotes.js';
 import { ruleTester } from '../utils/tester.js';
 
-ruleTester.run('value-without-quotes', rule as never, {
+ruleTester.run('value-without-quotes', rule, {
   valid: [
     'FOO=BAR',
     'FOO="BAR BAZ"',

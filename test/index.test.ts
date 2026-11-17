@@ -7,6 +7,7 @@ import path from 'node:path';
 import { describe, expect, it } from '@jest/globals';
 import { ESLint } from 'eslint';
 import plugin, { DotenvLanguage, rules } from '../src/index.js';
+import { recommendedConfig } from './utils/tester.js';
 
 /** Matches a semantic version at the start of a string. */
 const VERSION = /^\d+\.\d+\.\d+/u;
@@ -39,13 +40,18 @@ async function appliesTo(fileName: string): Promise<boolean> {
   const eslint = new ESLint({
     cwd,
     overrideConfigFile: true,
-    overrideConfig: plugin.configs.recommended as never,
+    overrideConfig: recommendedConfig,
   });
-  const config = (await eslint.calculateConfigForFile(
+  const config: unknown = await eslint.calculateConfigForFile(
     path.join(cwd, 'config', fileName),
-  )) as { language?: string } | undefined;
+  );
 
-  return config?.language instanceof DotenvLanguage;
+  return (
+    typeof config === 'object' &&
+    config !== null &&
+    'language' in config &&
+    config.language instanceof DotenvLanguage
+  );
 }
 
 /** Compares names alphabetically. */
@@ -92,15 +98,14 @@ describe('plugin', () => {
 
 describe('recommended configuration', () => {
   it('switches on every rule as an error', () => {
-    const [config] = plugin.configs.recommended as {
-      rules: Record<string, string>;
-      language: string;
-    }[];
-
-    expect(config?.language).toBe('dotenv/dotenv');
-    expect(config?.rules).toEqual(
-      Object.fromEntries(RULE_NAMES.map((name) => [`dotenv/${name}`, 'error'])),
-    );
+    expect(plugin.configs.recommended).toEqual([
+      expect.objectContaining({
+        language: 'dotenv/dotenv',
+        rules: Object.fromEntries(
+          RULE_NAMES.map((name) => [`dotenv/${name}`, 'error']),
+        ),
+      }) as unknown,
+    ]);
   });
 
   it.each([

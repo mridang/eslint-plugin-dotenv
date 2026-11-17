@@ -93,12 +93,8 @@ describe('DotenvSchema', () => {
   it('rejects a schema without a version or entries', () => {
     const message = '"version" string and an "entries" object';
 
-    expect(() => DotenvSchema.fromRaw({ entries: {} } as never)).toThrow(
-      message,
-    );
-    expect(() => DotenvSchema.fromRaw({ version: '1' } as never)).toThrow(
-      message,
-    );
+    expect(() => DotenvSchema.fromRaw({ entries: {} })).toThrow(message);
+    expect(() => DotenvSchema.fromRaw({ version: '1' })).toThrow(message);
   });
 
   it('loads a schema given as an object', () => {

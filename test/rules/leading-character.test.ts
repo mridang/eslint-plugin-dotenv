@@ -5,7 +5,7 @@
 import rule from '../../src/rules/leading-character.js';
 import { ruleTester } from '../utils/tester.js';
 
-ruleTester.run('leading-character', rule as never, {
+ruleTester.run('leading-character', rule, {
   valid: ['FOO=BAR', '', '_FOO=BAR', '# .FOO=BAR', 'export FOO=1', 'éclair=1'],
   invalid: [
     {

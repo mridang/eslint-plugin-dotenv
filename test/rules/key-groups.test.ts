@@ -52,15 +52,17 @@ describe('split', () => {
 
 describe('findMisplacements', () => {
   it('finds nothing in order', () => {
-    const [group] = KeyGroup.split(new DotenvParser().parse('A=1\nB=2\n').body);
+    const group = KeyGroup.split(
+      new DotenvParser().parse('A=1\nB=2\n').body,
+    ).at(0);
 
     expect(group?.findMisplacements()).toEqual([]);
   });
 
   it('names the key each misplaced key should go before', () => {
-    const [group] = KeyGroup.split(
+    const group = KeyGroup.split(
       new DotenvParser().parse('C=1\nB=2\nA=3\n').body,
-    );
+    ).at(0);
 
     expect(
       group?.findMisplacements().map(({ key, other }) => [key, other]),
@@ -74,14 +76,14 @@ describe('findMisplacements', () => {
 describe('sortedText', () => {
   it('sorts the keys, keeping the comments above each one with it', () => {
     const text = 'C=1\n# above A\nA=2\nB=3\n';
-    const [group] = KeyGroup.split(new DotenvParser().parse(text).body);
+    const group = KeyGroup.split(new DotenvParser().parse(text).body).at(0);
 
     expect(group?.sortedText(text)).toBe('# above A\nA=2\nB=3\nC=1');
   });
 
   it('uses the line breaks of the file', () => {
     const text = 'B=1\r\nA=2\r\n';
-    const [group] = KeyGroup.split(new DotenvParser().parse(text).body);
+    const group = KeyGroup.split(new DotenvParser().parse(text).body).at(0);
 
     expect(group?.sortedText(text)).toBe('A=2\r\nB=1');
   });

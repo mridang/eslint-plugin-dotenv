@@ -5,7 +5,7 @@
 import rule from '../../src/rules/extra-blank-line.js';
 import { ruleTester } from '../utils/tester.js';
 
-ruleTester.run('extra-blank-line', rule as never, {
+ruleTester.run('extra-blank-line', rule, {
   valid: ['A=B\nC=D', 'A=B\n\nC=D', 'A=B\n', 'A=B\n\n# c\n\nC=D', ''],
   invalid: [
     {

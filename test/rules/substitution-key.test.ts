@@ -5,7 +5,7 @@
 import rule from '../../src/rules/substitution-key.js';
 import { ruleTester } from '../utils/tester.js';
 
-ruleTester.run('substitution-key', rule as never, {
+ruleTester.run('substitution-key', rule, {
   valid: [
     'ABC=$BAR',
     `FOO=\${BAR}`,

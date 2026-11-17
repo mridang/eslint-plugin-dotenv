@@ -31,7 +31,7 @@ export interface RawSchemaEntry {
 }
 
 /** The schema as written in its JSON file. */
-export interface RawSchema {
+interface RawSchema {
   /** The version of the schema format. */
   readonly version: string;
   /** Whether keys that the schema does not list are accepted. */
@@ -54,6 +54,15 @@ const VALIDATORS: Readonly<
   Url: UrlValidator,
   Email: EmailValidator,
 };
+
+/**
+ * Whether a name is one of the types a value can be required to have.
+ * @param type The name to check.
+ * @returns `true` when there is a validator for the type.
+ */
+function isValueType(type: string): type is SchemaValueType {
+  return Object.hasOwn(VALIDATORS, type);
+}
 
 /**
  * The rules of one key of a schema.
@@ -86,20 +95,19 @@ export class SchemaEntry {
   public static fromRaw(key: string, raw: RawSchemaEntry): SchemaEntry {
     const type = raw.type ?? 'String';
 
-    if (!Object.hasOwn(VALIDATORS, type)) {
+    if (!isValueType(type)) {
       throw new TypeError(
         `The schema entry ${key} has an unknown type: ${type}.`,
       );
     }
 
-    const valueType = type as SchemaValueType;
     const pattern =
       raw.regex === undefined ? undefined : new RegExp(raw.regex, 'u');
 
     return new SchemaEntry(
       raw.required ?? false,
-      valueType,
-      new VALIDATORS[valueType](pattern),
+      type,
+      new VALIDATORS[type](pattern),
     );
   }
 
@@ -111,6 +119,24 @@ export class SchemaEntry {
   public check(value: string): SchemaValueType | undefined {
     return this.validator.isValid(value) ? undefined : this.type;
   }
+}
+
+/**
+ * Whether parsed JSON has the two members every schema needs.
+ * @param raw The parsed JSON.
+ * @returns `true` when it has a `version` string and an `entries` object.
+ */
+function isRawSchema(raw: unknown): raw is RawSchema {
+  if (typeof raw !== 'object' || raw === null) {
+    return false;
+  }
+
+  return (
+    'version' in raw &&
+    typeof raw.version === 'string' &&
+    'entries' in raw &&
+    typeof raw.entries === 'object'
+  );
 }
 
 /**
@@ -134,12 +160,12 @@ export class DotenvSchema {
 
   /**
    * Builds a schema from the JSON of a schema file.
-   * @param raw The parsed JSON.
+   * @param raw The parsed JSON, whatever it holds.
    * @returns The schema.
    * @throws {TypeError} When the JSON is not a valid schema.
    */
-  public static fromRaw(raw: RawSchema): DotenvSchema {
-    if (typeof raw.version !== 'string' || typeof raw.entries !== 'object') {
+  public static fromRaw(raw: unknown): DotenvSchema {
+    if (!isRawSchema(raw)) {
       throw new TypeError(
         'The schema must have a "version" string and an "entries" object.',
       );
@@ -171,6 +197,8 @@ export class DotenvSchema {
     // eslint-disable-next-line n/no-sync -- ESLint creates a rule synchronously, so the schema file has to be read synchronously
     const content = readFileSync(path.resolve(cwd, input), 'utf8');
 
-    return DotenvSchema.fromRaw(JSON.parse(content) as RawSchema);
+    const raw: unknown = JSON.parse(content);
+
+    return DotenvSchema.fromRaw(raw);
   }
 }

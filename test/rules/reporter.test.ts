@@ -26,6 +26,7 @@ interface Seen {
 }
 
 /** An editor that returns the edits it is asked for, so a test can read them. */
+// eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion -- the editor is a mock that carries only the one method the reporter calls, not the whole ESLint text editor
 const editor = {
   replaceTextRange: (range: [number, number], text: string): RuleTextEdit => ({
     range,
@@ -59,7 +60,7 @@ describe('Reporter', () => {
 
   it('reports on the first physical line of a line', () => {
     const { reporter, reports, source } = setup('A="x\ny"\n');
-    const [line] = source.ast.body;
+    const line = source.ast.body.at(0);
 
     if (line) {
       reporter.report(line, 'problem', { key: 'A' });
@@ -76,7 +77,7 @@ describe('Reporter', () => {
 
   it('replaces the text of the line when given new text', () => {
     const { reporter, reports, source } = setup('a=1\n');
-    const [line] = source.ast.body;
+    const line = source.ast.body.at(0);
 
     if (line) {
       reporter.report(line, 'problem', undefined, 'A=1');
@@ -88,7 +89,7 @@ describe('Reporter', () => {
 
   it('gives no fix when the text would not change', () => {
     const { reporter, reports, source } = setup('A=1\n');
-    const [line] = source.ast.body;
+    const line = source.ast.body.at(0);
 
     if (line) {
       reporter.report(line, 'problem', undefined, 'A=1');
@@ -99,7 +100,7 @@ describe('Reporter', () => {
 
   it('keeps Windows line breaks inside a multi-line value', () => {
     const { reporter, reports, source } = setup('a="x\r\ny"\r\n');
-    const [line] = source.ast.body;
+    const line = source.ast.body.at(0);
 
     if (line) {
       reporter.report(line, 'problem', undefined, 'A="x\ny"');
@@ -113,7 +114,7 @@ describe('Reporter', () => {
 
   it('passes a function that edits the file on to ESLint', () => {
     const { reporter, reports, source } = setup('A=1\n');
-    const [line] = source.ast.body;
+    const line = source.ast.body.at(0);
     const fix = jest.fn(() => null);
 
     if (line) {

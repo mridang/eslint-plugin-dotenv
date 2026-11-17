@@ -5,7 +5,7 @@
 import rule from '../../src/rules/space-character.js';
 import { ruleTester } from '../utils/tester.js';
 
-ruleTester.run('space-character', rule as never, {
+ruleTester.run('space-character', rule, {
   valid: [
     'DEBUG_HTTP=true',
     ' DEBUG_HTTP=true',

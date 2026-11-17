@@ -5,7 +5,7 @@
 import rule from '../../src/rules/incorrect-delimiter.js';
 import { ruleTester } from '../utils/tester.js';
 
-ruleTester.run('incorrect-delimiter', rule as never, {
+ruleTester.run('incorrect-delimiter', rule, {
   valid: [
     'FOO_BAR=FOOBAR',
     'F100=BAR',
